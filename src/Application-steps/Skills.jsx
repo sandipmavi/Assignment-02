@@ -1,4 +1,5 @@
 import React from "react";
+import { useUser } from "../context/UserContext";
 const skillOptions = [
   "React",
   "JavaScript",
@@ -13,7 +14,8 @@ const skillOptions = [
   "MongoDB",
   "SQL",
 ];
-const Skills = ({ formData, handleInputChange, errors }) => {
+const Skills = () => {
+  const { handleInputChange, formData, errors } = useUser();
   const handleSkillToggle = (skill) => {
     const currentSkills = formData.experience.skills;
     const updatedSkills = currentSkills.includes(skill)

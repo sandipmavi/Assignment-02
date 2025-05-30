@@ -1,7 +1,9 @@
 import React from "react";
 import { Calendar } from "lucide-react";
+import { useUser } from "../context/UserContext";
 
-const Education = ({ handleInputChange, formData, errors }) => {
+const Education = () => {
+  const { handleInputChange, formData, errors } = useUser();
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">

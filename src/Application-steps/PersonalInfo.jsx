@@ -1,7 +1,9 @@
 import { User } from "lucide-react";
 import React from "react";
+import { useUser } from "../context/UserContext";
 
-const PersonalInfo = ({ handleInputChange, formData, errors }) => {
+const PersonalInfo = () => {
+  const { handleInputChange, formData, errors } = useUser();
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">

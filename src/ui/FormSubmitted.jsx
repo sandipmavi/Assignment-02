@@ -1,3 +1,4 @@
+import { CheckCircle } from "lucide-react";
 import React from "react";
 
 const FormSubmitted = () => {

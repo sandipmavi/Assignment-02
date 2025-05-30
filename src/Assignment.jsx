@@ -18,93 +18,51 @@ import Motivation from "./Application-steps/Motivation";
 import Education from "./Application-steps/Education";
 import PersonalInfo from "./Application-steps/PersonalInfo";
 import FormSubmitted from "./ui/FormSubmitted";
+import validateStep from "./utils/ValidateData";
+import { useUser } from "./context/UserContext";
 const Assignment = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      dateOfBirth: "",
-    },
-    education: {
-      university: "",
-      degree: "",
-      graduationYear: "",
-      cgpa: "",
-    },
-    experience: {
-      hasInternship: "",
-      previousRole: "",
-      skills: [],
-      portfolio: "",
-    },
-    motivation: {
-      whyFreJun: "",
-      careerGoals: "",
-      availability: "",
-    },
-  });
-
-  const [errors, setErrors] = useState({});
+  const { formData, setErrors } = useUser();
+  //   const [formData, setFormData] = useState({
+  //     personalInfo: {
+  //       fullName: "",
+  //       email: "",
+  //       phone: "",
+  //       location: "",
+  //       dateOfBirth: "",
+  //     },
+  //     education: {
+  //       university: "",
+  //       degree: "",
+  //       graduationYear: "",
+  //       cgpa: "",
+  //     },
+  //     experience: {
+  //       hasInternship: "",
+  //       previousRole: "",
+  //       skills: [],
+  //       portfolio: "",
+  //     },
+  //     motivation: {
+  //       whyFreJun: "",
+  //       careerGoals: "",
+  //       availability: "",
+  //     },
+  //   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateStep = (step) => {
-    const newErrors = {};
-
-    switch (step) {
-      case 1:
-        if (!formData.personalInfo.fullName)
-          newErrors.fullName = "Full name is required";
-        if (!formData.personalInfo.email) newErrors.email = "Email is required";
-        if (!formData.personalInfo.phone)
-          newErrors.phone = "Phone number is required";
-        if (!formData.personalInfo.location)
-          newErrors.location = "Location is required";
-        break;
-      case 2:
-        if (!formData.education.university)
-          newErrors.university = "University is required";
-        if (!formData.education.degree) newErrors.degree = "Degree is required";
-        if (!formData.education.graduationYear)
-          newErrors.graduationYear = "Graduation year is required";
-        break;
-      case 3:
-        if (!formData.experience.hasInternship)
-          newErrors.hasInternship = "Please select an option";
-        if (formData.experience.skills.length === 0)
-          newErrors.skills = "Please select at least one skill";
-        break;
-      case 4:
-        if (!formData.motivation.whyFreJun)
-          newErrors.whyFreJun = "This field is required";
-        if (!formData.motivation.availability)
-          newErrors.availability = "Please select availability";
-        break;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleInputChange = (section, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value,
-      },
-    }));
-
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
-  };
+  //   const handleInputChange = (section, field, value) => {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       [section]: {
+  //         ...prev[section],
+  //         [field]: value,
+  //       },
+  //     }));
 
   const nextStep = () => {
-    if (validateStep(currentStep)) {
+    if (validateStep(formData, currentStep, setErrors)) {
       setCurrentStep((prev) => Math.min(prev + 1, 5));
     }
   };
@@ -114,7 +72,7 @@ const Assignment = () => {
   };
 
   const handleSubmit = () => {
-    if (validateStep(4)) {
+    if (validateStep(4, formData, setErrors)) {
       setIsSubmitted(true);
       setCurrentStep(5);
     }
@@ -123,7 +81,6 @@ const Assignment = () => {
   if (isSubmitted) {
     return <FormSubmitted />;
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
@@ -140,34 +97,10 @@ const Assignment = () => {
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <StepIndicator currentStep={currentStep} />
-          {currentStep === 1 && (
-            <PersonalInfo
-              formData={formData}
-              handleInputChange={handleInputChange}
-              errors={errors}
-            />
-          )}
-          {currentStep === 2 && (
-            <Education
-              formData={formData}
-              handleInputChange={handleInputChange}
-              errors={errors}
-            />
-          )}
-          {currentStep === 3 && (
-            <Skills
-              formData={formData}
-              handleInputChange={handleInputChange}
-              errors={errors}
-            />
-          )}
-          {currentStep === 4 && (
-            <Motivation
-              handleInputChange={handleInputChange}
-              errors={errors}
-              formData={formData}
-            />
-          )}
+          {currentStep === 1 && <PersonalInfo />}
+          {currentStep === 2 && <Education />}
+          {currentStep === 3 && <Skills />}
+          {currentStep === 4 && <Motivation />}
           <NavigationButton
             handleSubmit={handleSubmit}
             prevStep={prevStep}

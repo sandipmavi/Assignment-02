@@ -1,6 +1,8 @@
 import React from "react";
+import { useUser } from "../context/UserContext";
 
-const Motivation = ({ errors, handleInputChange, formData }) => {
+const Motivation = () => {
+  const { handleInputChange, formData, errors } = useUser();
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
